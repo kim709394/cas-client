@@ -10,4 +10,4 @@ cas-client1和cas-client2是使用
 
 customer-cas-client-spring-boot-starter是整合官方依赖包后写的适用于目前主流的前后分离的分布式系统。
 
-官方包提供的支持更适合后端渲染前端页面的单体架构系统
+官方包提供的支持更适合后端渲染前端页面的单体架构系统 
