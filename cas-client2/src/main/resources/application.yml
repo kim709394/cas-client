@@ -1,0 +1,13 @@
+server:
+  port: 9003
+cas:
+  server-url-prefix: http://localhost:8443/cas    #cas-server前缀
+  server-login-url: http://localhost:8443/cas/login    #cas-server登陆url
+  client-host-url: http://localhost:9002              #客户端服务地址
+  use-session: true                              #默认使用session
+  validation-type: cas   #验证协议Patterns
+  authentication-url-patterns: /*
+  validation-url-patterns: /*
+  request-wrapper-url-patterns: /*
+  assertion-thread-local-url-patterns: /*
+
