@@ -1,5 +1,10 @@
 package com.kim.cas.client.starter.config;
 
+import com.kim.cas.client.starter.manager.AuthenticationManager;
+import com.kim.cas.client.starter.manager.TicketValidationManager;
+import com.kim.cas.client.starter.response.AuthenticationFailureResponseManager;
+import com.kim.cas.client.starter.response.TicketValidationFailureResponseManager;
+
 import java.util.List;
 
 /**
@@ -19,6 +24,31 @@ public interface CasClientConfigurer {
      * */
     List<String> configrerIgnoreUrls();
 
+
+    /**
+     * 登录认证
+     * @return AuthenticationManager
+     * */
+    AuthenticationManager authenticationAssertionManager();
+
+
+    /**
+     * ticket认证通过后的Assertion管理
+     * @return TicketValidationManager
+     * */
+    TicketValidationManager ticketValidationAssertionManager();
+
+    /**
+     *  认证失败，进行重新认证请求返回管理
+     * @return AuthenticationFailureResponseManager
+     * */
+    AuthenticationFailureResponseManager authenticationFailureResponseManager();
+
+    /**
+     * ticket认证失败响应管理
+     * @return TicketValidationFailureResponseManager
+     * */
+    TicketValidationFailureResponseManager ticketValidationFailureResponseManager();
 
 
 

@@ -20,7 +20,7 @@ public class CasClientConfiguration {
     private CasClientConfigurationProperties casClientConfigurationProperties;
 
     @Autowired
-    private List<CasClientConfigurer> casClientConfigurers;
+    private CasClientConfigurer casClientConfigurers;
 
 
 
