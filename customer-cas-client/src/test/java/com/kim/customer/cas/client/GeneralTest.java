@@ -38,7 +38,7 @@ public class GeneralTest {
         String service=servicePath+frontRoute;
         String casAuthPath=data.getCasAuthPath();
         String authPath=casAuthPath+ URLEncoder.encode(service,"UTF-8");
-        System.out.println(authPath);
+        System.out.println("authPath:"+authPath);
 
     }
 
