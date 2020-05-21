@@ -1,6 +1,6 @@
 package com.kim.customer.cas.client;
 
-import com.kim.cas.client.starter.annotation.EnableCasClient;
+import com.kim.cas.client.starter.annotation.EnableCustomerCasClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 
 @SpringBootApplication
-@EnableCasClient
+@EnableCustomerCasClient
 public class CustomerCasClientApplication {
 
 

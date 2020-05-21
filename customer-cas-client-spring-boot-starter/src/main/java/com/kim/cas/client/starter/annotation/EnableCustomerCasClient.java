@@ -17,7 +17,7 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 @Import(CasClientConfiguration.class)
-public @interface EnableCasClient {
+public @interface EnableCustomerCasClient {
 
 
 
