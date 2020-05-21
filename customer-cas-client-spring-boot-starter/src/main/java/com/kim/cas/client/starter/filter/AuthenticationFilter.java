@@ -82,7 +82,7 @@ public class AuthenticationFilter extends AbstractConfigurationFilter {
             preCasAuthenticationRequestResult.setPath(request.getRequestURI());
             preCasAuthenticationRequestResult.setTimestamp(System.currentTimeMillis());
 
-            String casAuthPath=properties.getServerLoginUrl()+protocol.getServiceParameterName()+"=";
+            String casAuthPath=properties.getServerLoginUrl()+"?"+protocol.getServiceParameterName()+"=";
             String servicePath=properties.getClientHostUrl()+CasClientConfigurer.TICKET_VALIDITY+"?"+CasClientConfigurer.FRONT_ROUTE+"=";
             PreCasAuthenticationRequest preRequest=new PreCasAuthenticationRequest();
             preRequest.setCasAuthPath(casAuthPath);

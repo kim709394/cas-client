@@ -1,7 +1,8 @@
 package com.kim.cas.client.starter.annotation;
 
 
-import net.unicon.cas.client.configuration.CasClientConfiguration;
+
+import com.kim.cas.client.starter.config.CasClientConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;

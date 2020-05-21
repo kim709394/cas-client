@@ -30,7 +30,7 @@ public abstract class CasClientConfigurerAdapter implements CasClientConfigurer 
     @Override
     public List<String> configurerAuthenticationUrls() {
         List<String> urls=new ArrayList<>();
-        urls.add("/**");
+        urls.add("/*");
         return urls;
     }
 
