@@ -13,21 +13,19 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLDecoder;
 
 /**
  * @author huangjie
  * @description    ticket认证过滤器
  * @date 2020/5/20
  */
-public class TicketValidationFilter implements Filter {
+public class TicketValidationFilter extends AbstractConfigurationFilter {
 
 
-    private CasClientConfigurer casClientConfigurer;
-    private CasClientConfigurationProperties properties;
 
     public TicketValidationFilter(CasClientConfigurer casClientConfigurer,CasClientConfigurationProperties properties){
-        this.casClientConfigurer=casClientConfigurer;
-        this.properties=properties;
+        super(casClientConfigurer,properties);
     }
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -35,43 +33,36 @@ public class TicketValidationFilter implements Filter {
         //验证ticket
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        EnableCasClient.ValidationType validationType = properties.getValidationType();
-        Protocol protocol=validationType != EnableCasClient.ValidationType.CAS && validationType != EnableCasClient.ValidationType.CAS3 ?  Protocol.SAML11: Protocol.CAS2;
-
+        Protocol protocol=getProtocol();
         String ticket = CommonUtils.safeGetParameter(request, protocol.getArtifactParameterName());
+        TicketValidationFailureResponseManager ticketValidationFailureResponseManager = casClientConfigurer.ticketValidationFailureResponseManager();
         if(CommonUtils.isBlank(ticket)){
-            filterChain.doFilter(request,response);
+            ticketValidationFailureResponseManager.ticketValidationExceptionResponse(request,response,new TicketValidationException("ticket is not found"));
             return;
         }
 
-        String service=properties.getClientHostUrl()+request.getRequestURI()+"?frontRoute="+request.getParameter("frontRoute");
-        TicketValidator ticketValidator=null;
-        switch(properties.getValidationType()) {
-            case CAS:
-                ticketValidator = new Cas20ServiceTicketValidator(properties.getServerUrlPrefix());
-                break;
-            case CAS3:
-                ticketValidator = new Cas30ServiceTicketValidator(properties.getServerUrlPrefix());
-                break;
-            case SAML:
-                ticketValidator = new Saml11TicketValidator(properties.getServerUrlPrefix());
-                break;
-            default:
-                throw new IllegalStateException("Unknown CAS validation type");
-        }
+        String service=properties.getClientHostUrl()+request.getRequestURI()+"?"+CasClientConfigurer.FRONT_ROUTE+"="+request.getParameter(CasClientConfigurer.FRONT_ROUTE);
+
+        TicketValidator ticketValidator=getTicketValidator();
+
         Assertion assertion=null;
         try {
             assertion = ticketValidator.validate(ticket, service);
         } catch (TicketValidationException e) {
             //ticket认证失败
-            TicketValidationFailureResponseManager ticketValidationFailureResponseManager = casClientConfigurer.ticketValidationFailureResponseManager();
             ticketValidationFailureResponseManager.ticketValidationExceptionResponse(request,response,e);
             return;
         }
         //ticket认证成功
         TicketValidationManager ticketValidationManager = casClientConfigurer.ticketValidationAssertionManager();
         ticketValidationManager.ticketValidationSuccess(request,response,assertion);
-        filterChain.doFilter(request,response);
+        String frontRoute = request.getParameter(CasClientConfigurer.FRONT_ROUTE);
+        if(CommonUtils.isNotBlank(frontRoute)){
+            String decode = URLDecoder.decode(frontRoute, "UTF-8");
+            response.sendRedirect(decode);
+            return;
+        }
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         return;
     }
 

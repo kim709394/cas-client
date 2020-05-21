@@ -14,6 +14,10 @@ import java.util.List;
  */
 public interface CasClientConfigurer {
 
+    String TICKET_VALIDITY="/ticketValidity";
+    String FRONT_ROUTE="frontRoute";
+
+
     /**
      * cas要验证的接口url集合
      * */
